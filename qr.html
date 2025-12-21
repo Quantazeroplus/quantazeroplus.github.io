@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Ecosystem | Quantazeroplus</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
     <script>
+        // Immediate Theme Check to prevent flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
         tailwind.config = {
             darkMode: 'class', 
             theme: {
@@ -34,7 +41,7 @@
                         'float': 'float 6s ease-in-out infinite',
                         'blob': 'blob 7s infinite',
                         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'marquee': 'marquee 30s linear infinite',
+                        'marquee': 'marquee 10s linear infinite', /* 10s Speed */
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'dash-flow': 'dashFlow 2s linear infinite',
                         'scan-line': 'scanLine 3s linear infinite',
@@ -53,61 +60,36 @@
     </script>
 
     <style>
+        /* UTILITIES */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         .dark ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        ::-webkit-scrollbar-thumb:hover { background: #007bff; }
 
-        .glass {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .dark .glass {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-        #navbar.scrolled { width: 85%; top: 20px; border-radius: 50px; }
+        /* GLASS EFFECTS */
+        .glass { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .dark .glass { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); }
         
-        .mask-marquee {
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
-
-        /* NEW ADDITION: QR Pattern Background */
-        .bg-qr-pattern {
-            background-image: radial-gradient(currentColor 1px, transparent 1px);
-            background-size: 20px 20px;
-            opacity: 0.1;
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .dark .glass-card { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); }
         
-        /* NEW ADDITION: Custom Matrix Corners */
-        .corner-border {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-color: currentColor;
-            border-style: solid;
-            transition: all 0.3s ease;
-        }
+        #navbar.scrolled { width: 85%; top: 20px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        /* PATTERNS & BORDERS */
+        .mask-marquee { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .bg-qr-pattern { background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 20px 20px; opacity: 0.1; }
+        
+        .corner-border { position: absolute; width: 20px; height: 20px; border-color: currentColor; border-style: solid; transition: all 0.3s ease; }
         .corner-tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
         .corner-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
         .corner-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
         .corner-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
         .group:hover .corner-border { width: 30px; height: 30px; }
+        
+        /* QR TOOL */
+        #qrCanvas { border-radius: 1rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-darkBg text-slate-800 dark:text-gray-200 antialiased overflow-x-hidden transition-colors duration-500 min-h-screen flex flex-col">
@@ -121,18 +103,21 @@
                 </div>
                 <span class="text-lg md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap">Quantazeroplus</span>
             </a>
+
             <div class="hidden md:flex space-x-10 items-center font-medium text-sm text-slate-600 dark:text-gray-300">
                 <a href="index.html" class="hover:text-vermaBlue transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-500 hover:after:w-full after:transition-all">Home</a>
                 <a href="service.html" class="hover:text-vermaBlue transition py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-blue-500 hover:after:w-full after:transition-all">Start Project</a>
-                <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/20 border border-slate-300 dark:border-white/10 flex items-center justify-center transition hover:scale-110 shadow-sm">
+                <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-white/20 border border-slate-300 dark:border-white/10 flex items-center justify-center transition hover:scale-110 shadow-sm hover:bg-slate-300 dark:hover:bg-white/40">
                     <i class="fas fa-moon dark:hidden text-slate-600"></i>
                     <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
                 </button>
             </div>
+
             <div class="flex items-center gap-4 md:hidden">
                 <button id="mobile-menu-btn" class="text-2xl text-slate-800 dark:text-white p-2 focus:outline-none"><i class="fas fa-bars"></i></button>
             </div>
         </div>
+
         <div id="mobile-menu" class="hidden md:hidden glass border-2 border-slate-200 dark:border-gray-700 mt-2 mx-auto w-full rounded-2xl shadow-2xl overflow-hidden">
             <div class="flex flex-col p-4 space-y-3 text-center">
                 <a href="index.html" class="p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 font-medium">Home</a>
@@ -401,7 +386,7 @@
             </div>
         </section>
 
-        <section class="flex flex-col lg:flex-row-reverse items-center gap-20">
+        <section class="flex flex-col lg:flex-row-reverse items-center gap-20 mb-20">
             <div class="lg:w-1/2 space-y-10 animate-slide-up">
                 <div class="inline-block py-1 px-4 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-widest">Complex Venue Logic</div>
                 <h2 class="text-4xl md:text-6xl font-serif font-extrabold text-slate-900 dark:text-white leading-[1.1]">Malls: Navigating <br> <span class="text-blue-600">The Discovery.</span></h2>
@@ -417,6 +402,67 @@
                 <div class="absolute -inset-10 bg-blue-500/10 rounded-full blur-[100px] animate-pulse-slow"></div>
                 <div class="glass-card p-4 rounded-[3.5rem] relative z-10 shadow-2xl">
                     <img src="https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?q=80&w=1000&auto=format&fit=crop" class="w-full rounded-[2.5rem]" alt="Mall QR Navigator">
+                </div>
+            </div>
+        </section>
+
+        <section id="qr-tool" class="container mx-auto px-4 mb-32 relative z-20">
+            <div class="glass-card p-4 md:p-8 rounded-[2.5rem] border border-white/20 bg-white/40 dark:bg-darkCard/40 shadow-2xl">
+                <div class="text-center mb-8">
+                    <span class="text-green-600 dark:text-green-400 font-bold uppercase tracking-widest text-xs">Free Tool</span>
+                    <h2 class="text-2xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mt-2">Generate Visual QR</h2>
+                    <p class="text-sm text-slate-500 mt-2">Create custom scannable art instantly.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div class="p-6 md:p-8 rounded-3xl bg-white/50 dark:bg-darkBg/50 border border-slate-200 dark:border-white/10 h-full flex flex-col justify-center shadow-inner">
+                        <form onsubmit="event.preventDefault(); window.generateVisualQR();" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2">Target Link</label>
+                                <div class="flex items-center bg-slate-50 dark:bg-darkCard border border-slate-200 dark:border-gray-700 rounded-xl px-4 py-3">
+                                    <i class="fas fa-link text-slate-400 mr-3"></i>
+                                    <input type="url" id="qrLink" placeholder="https://yourwebsite.com" required class="w-full bg-transparent outline-none text-slate-900 dark:text-white placeholder-slate-400">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2">Background Image</label>
+                                <div class="relative border-2 border-dashed border-slate-300 dark:border-gray-700 rounded-xl p-8 text-center hover:border-blue-500 transition-colors cursor-pointer group bg-slate-50/50 dark:bg-darkCard/50">
+                                    <input type="file" id="qrImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="window.handleImageUpload(this)" required>
+                                    <div id="uploadText">
+                                        <i class="fas fa-cloud-upload-alt text-4xl text-slate-400 group-hover:text-blue-500 mb-2 transition-colors"></i>
+                                        <p class="text-xs text-slate-500">Drop JPG/PNG here</p>
+                                    </div>
+                                    <div id="previewArea" class="hidden flex-col items-center">
+                                        <img id="imgPreview" class="w-16 h-16 object-cover rounded-lg shadow-md mb-2 border border-white/20">
+                                        <p class="text-xs text-green-500 font-bold"><i class="fas fa-check-circle mr-1"></i>Loaded</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-xs font-bold text-slate-500">QR Contrast</label>
+                                    <span id="opacityValue" class="text-xs font-bold text-blue-500">80%</span>
+                                </div>
+                                <input type="range" id="qrOpacity" min="0.3" max="1" step="0.1" value="0.8" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                                <i class="fas fa-magic"></i> Generate Visual QR
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center h-full min-h-[400px]">
+                        <div class="glass-card p-4 rounded-3xl bg-white/50 dark:bg-white/5 backdrop-blur-xl shadow-2xl relative aspect-square w-full max-w-[350px] flex items-center justify-center group">
+                            <canvas id="qrCanvas" width="1000" height="1000" class="w-full h-full object-contain rounded-2xl"></canvas>
+                            <div id="placeholderText" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 pointer-events-none">
+                                <i class="fas fa-qrcode text-6xl opacity-10 mb-4 group-hover:scale-110 transition"></i>
+                                <span class="text-sm font-medium opacity-40">Preview Area</span>
+                            </div>
+                        </div>
+                        <button onclick="window.downloadQR()" id="downloadBtn" disabled class="mt-6 w-full max-w-[350px] bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-4 rounded-xl font-bold hover:shadow-xl transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-download"></i> Download High-Res
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -466,7 +512,7 @@
                     <ul class="space-y-4 text-sm">
                         <li class="flex items-start gap-3">
                             <i class="fas fa-map-marker-alt text-red-500 mt-1"></i>
-                            <span>Mumbai, India<br>Serving Globally</span>
+                            <span>Patna, India<br>Serving Globally</span>
                         </li>
                         <li>
                             <div class="flex gap-4 mt-4">
@@ -490,9 +536,15 @@
     <script>
         function toggleTheme() {
             const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
         }
+
         window.onscroll = function() {
             const nav = document.getElementById('navbar');
             if (nav) {
@@ -501,6 +553,90 @@
             }
         };
         document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+
+        // VISUAL QR LOGIC
+        let uploadedImage = null;
+
+        window.handleImageUpload = function(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        uploadedImage = img;
+                        document.getElementById('uploadText').classList.add('hidden');
+                        const preview = document.getElementById('previewArea');
+                        preview.classList.remove('hidden');
+                        preview.classList.add('flex');
+                        document.getElementById('imgPreview').src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        window.generateVisualQR = function() {
+            if (!uploadedImage) {
+                alert("Please upload a background image first.");
+                return;
+            }
+
+            const text = document.getElementById('qrLink').value;
+            const opacity = document.getElementById('qrOpacity').value;
+            const canvas = document.getElementById('qrCanvas');
+            const ctx = canvas.getContext('2d');
+            const size = 1000;
+
+            canvas.width = size;
+            canvas.height = size;
+
+            document.getElementById('placeholderText').classList.add('hidden');
+
+            let sWidth = uploadedImage.width;
+            let sHeight = uploadedImage.height;
+            let sx = 0, sy = 0;
+            if (sWidth > sHeight) {
+                sWidth = sHeight;
+                sx = (uploadedImage.width - sWidth) / 2;
+            } else {
+                sHeight = sWidth;
+                sy = (uploadedImage.height - sHeight) / 2;
+            }
+            ctx.drawImage(uploadedImage, sx, sy, sWidth, sHeight, 0, 0, size, size);
+
+            const typeNumber = 0;
+            const errorCorrectionLevel = 'H';
+            const qr = qrcode(typeNumber, errorCorrectionLevel);
+            qr.addData(text);
+            qr.make();
+
+            const moduleCount = qr.getModuleCount();
+            const moduleSize = size / moduleCount;
+
+            for (let r = 0; r < moduleCount; r++) {
+                for (let c = 0; c < moduleCount; c++) {
+                    if (qr.isDark(r, c)) {
+                        const isFinder = (r < 8 && c < 8) || (r < 8 && c >= moduleCount - 8) || (r >= moduleCount - 8 && c < 8);
+                        ctx.fillStyle = isFinder ? "#000000" : `rgba(0, 0, 0, ${opacity})`;
+                        ctx.fillRect(c * moduleSize, r * moduleSize, moduleSize + 0.5, moduleSize + 0.5);
+                    }
+                }
+            }
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        window.downloadQR = function() {
+            const canvas = document.getElementById('qrCanvas');
+            const link = document.createElement('a');
+            link.download = 'quantazeroplus-visual-qr.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        document.getElementById('qrOpacity').addEventListener('input', function() {
+            document.getElementById('opacityValue').textContent = Math.round(this.value * 100) + '%';
+        });
     </script>
 </body>
 </html>
