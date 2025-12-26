@@ -811,6 +811,124 @@
             </div>
         </div>
     </section>
+    <style>
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Floating keyframes removed to clean up code */
+
+        .marquee-freedom-slim {
+            position: relative;
+            z-index: 80;
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .marquee-ribbon-free {
+            display: flex;
+            width: max-content;
+            animation: marqueeScroll 30s linear infinite;
+            padding: 5px 0;
+        }
+
+        .floating-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            margin: 0 0.5rem;
+            border-radius: 9999px;
+            background: white;
+            border: 1px solid rgba(0, 123, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            /* Animation line removed here */
+            text-decoration: none;
+        }
+
+        .dark .floating-pill {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pill-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .dark .pill-label {
+            color: #94a3b8;
+        }
+    </style>
+
+    <div class="marquee-freedom-slim mt-[-50px] md:mt-0">
+        <div class="marquee-ribbon-free">
+            <div class="flex items-center">
+                <a href="web.html" class="floating-pill">
+                    <i class="fas fa-code text-blue-500 text-xs"></i>
+                    <span class="pill-label">Web Dev</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-shield-halved text-green-500 text-xs"></i>
+                    <span class="pill-label">Secure UI</span>
+                </div>
+                <a href="qr.html" class="floating-pill">
+                    <i class="fas fa-qrcode text-purple-500 text-xs"></i>
+                    <span class="pill-label">QR Systems</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-wand-magic-sparkles text-pink-500 text-xs"></i>
+                    <span class="pill-label">Modern UI</span>
+                </div>
+                <a href="brand.html" class="floating-pill">
+                    <i class="fas fa-palette text-orange-500 text-xs"></i>
+                    <span class="pill-label">Branding</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-leaf text-emerald-500 text-xs"></i>
+                    <span class="pill-label">Zero Maintenance</span>
+                </div>
+            </div>
+
+            <div class="flex items-center">
+                <a href="web.html" class="floating-pill">
+                    <i class="fas fa-code text-blue-500 text-xs"></i>
+                    <span class="pill-label">Web Dev</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-shield-halved text-green-500 text-xs"></i>
+                    <span class="pill-label">Secure UI</span>
+                </div>
+                <a href="qr.html" class="floating-pill">
+                    <i class="fas fa-qrcode text-purple-500 text-xs"></i>
+                    <span class="pill-label">QR Systems</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-wand-magic-sparkles text-pink-500 text-xs"></i>
+                    <span class="pill-label">Modern UI</span>
+                </div>
+                <a href="brand.html" class="floating-pill">
+                    <i class="fas fa-palette text-orange-500 text-xs"></i>
+                    <span class="pill-label">Branding</span>
+                </a>
+                <div class="floating-pill">
+                    <i class="fas fa-leaf text-emerald-500 text-xs"></i>
+                    <span class="pill-label">Zero Maintenance</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section id="solution"
         class="py-24 relative bg-slate-100 dark:bg-[#03081a] transition-colors duration-500 overflow-hidden">
@@ -1166,53 +1284,669 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10" id="mainServiceGrid">
-                <div onclick="window.toggleSubGrid('web', this)"
-                    class="service-card group glass-card rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
-                    <div
-                        class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-indigo-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fas fa-laptop-code"></i>
+                <div class="qz-service-container w-full">
+                    <style>
+                        .qz-service-card.web-theme {
+                            --primary-color: #3b82f6;
+                            /* Blue-500 */
+                            --secondary-color: #6366f1;
+                            /* Indigo-500 */
+                            --card-bg: #ffffff;
+                            /* Default White Mode */
+                            --text-main: #1e293b;
+                            --text-sub: #64748b;
+
+                            width: 100%;
+                            min-height: 240px;
+                            background: var(--card-bg);
+                            border-radius: 20px;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            cursor: pointer;
+                            overflow: hidden;
+                            transition: all 0.4s ease;
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            text-align: center;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+
+                            /* FIX FOR CURSOR BLINKING / TEXT SELECTION */
+                            user-select: none;
+                            -webkit-user-select: none;
+                            -webkit-tap-highlight-color: transparent;
+                        }
+
+                        /* DARK MODE AUTOMATIC OVERRIDE */
+                        .dark .qz-service-card.web-theme {
+                            --card-bg: #0f172a;
+                            --text-main: #ffffff;
+                            --text-sub: #94a3b8;
+                            border: 1px solid rgba(255, 255, 255, 0.05);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        }
+
+                        .qz-border-frame-web {
+                            position: absolute;
+                            inset: 0;
+                            border: 2px solid transparent;
+                            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                                linear-gradient(135deg, var(--primary-color), var(--secondary-color)) border-box;
+                            border-radius: 20px;
+                            opacity: 0.3;
+                            transform: rotate(-3deg) scale(1.02);
+                            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .qz-service-card.web-theme:hover .qz-border-frame-web {
+                            opacity: 1;
+                            transform: rotate(0deg) scale(0.95);
+                            inset: 10px;
+                        }
+
+                        .qz-service-card.web-theme::before {
+                            content: "";
+                            position: absolute;
+                            width: 140px;
+                            height: 140px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            filter: blur(60px);
+                            opacity: 0.15;
+                            z-index: 0;
+                            transition: all 0.5s ease;
+                        }
+
+                        .qz-service-card.web-theme:hover::before {
+                            opacity: 0.4;
+                            transform: scale(1.5);
+                        }
+
+                        .qz-content-wrapper {
+                            position: relative;
+                            z-index: 2;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 12px;
+                            pointer-events: none;
+                        }
+
+                        .qz-icon-box-web {
+                            font-size: 40px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            filter: drop-shadow(0 2px 10px rgba(59, 130, 246, 0.3));
+                            transition: transform 0.5s ease;
+                        }
+
+                        .qz-service-card.web-theme:hover .qz-icon-box-web {
+                            transform: scale(1.1) translateY(-5px);
+                        }
+
+                        .qz-title-web {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: var(--text-main);
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin: 0;
+                        }
+
+                        .qz-description-web {
+                            font-size: 14px;
+                            color: var(--text-sub);
+                            margin: 0;
+                            transition: color 0.3s ease;
+                        }
+
+                        .qz-service-card.web-theme:hover .qz-description-web {
+                            color: var(--primary-color);
+                        }
+
+                        .qz-click-hint-web {
+                            margin-top: 15px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: var(--primary-color);
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
+                            opacity: 0.6;
+                            transition: all 0.3s ease;
+                        }
+
+                        .qz-service-card.web-theme:hover .qz-click-hint-web {
+                            letter-spacing: 5px;
+                            opacity: 1;
+                        }
+
+                        .qz-service-card.web-theme:hover {
+                            transform: translateY(-10px);
+                        }
+                    </style>
+
+                    <div onclick="window.toggleSubGrid('web', this)" class="qz-service-card web-theme">
+                        <div class="qz-border-frame-web"></div>
+                        <div class="qz-content-wrapper">
+                            <div class="qz-icon-box-web"><i class="fas fa-laptop-code"></i></div>
+                            <h3 class="qz-title-web">Web-Dev.</h3>
+                            <p class="qz-description-web">Portfolio, E-commerce </p>
+                            <div class="qz-click-hint-web">View All <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Web Development</h3>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mb-4">Portfolio, E-commerce & Landings</p>
-                    <span class="text-vermaBlue dark:text-blue-400 text-sm font-semibold group-hover:underline">View All
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i></span>
+
+                    <div id="subgrid-web"
+                        class="hidden w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
                 </div>
 
-                <div onclick="window.toggleSubGrid('assets', this)"
-                    class="service-card group glass-card rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
-                    <div
-                        class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fas fa-qrcode"></i>
+                <div class="qz-service-container w-full">
+                    <style>
+                        .qz-service-card.qr-theme {
+                            --primary-color: #10b981;
+                            /* Emerald-500 */
+                            --secondary-color: #22c55e;
+                            /* Green-500 */
+                            --card-bg: #ffffff;
+                            /* Default White Mode */
+                            --text-main: #1e293b;
+                            --text-sub: #64748b;
+
+                            width: 100%;
+                            min-height: 240px;
+                            background: var(--card-bg);
+                            border-radius: 20px;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            cursor: pointer;
+                            overflow: hidden;
+                            transition: all 0.4s ease;
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            text-align: center;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+
+                            /* FIX FOR CURSOR BLINKING / TEXT SELECTION */
+                            user-select: none;
+                            -webkit-user-select: none;
+                            -webkit-tap-highlight-color: transparent;
+                        }
+
+                        /* DARK MODE AUTOMATIC OVERRIDE */
+                        .dark .qz-service-card.qr-theme {
+                            --card-bg: #0f172a;
+                            --text-main: #ffffff;
+                            --text-sub: #94a3b8;
+                            border: 1px solid rgba(255, 255, 255, 0.05);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        }
+
+                        
+                        .qz-border-frame-qr {
+                            position: absolute;
+                            inset: 0;
+                            border: 2px solid transparent;
+                            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                                linear-gradient(135deg, var(--primary-color), var(--secondary-color)) border-box;
+                            border-radius: 20px;
+                            opacity: 0.3;
+                            transform: rotate(-3deg) scale(1.02);
+                            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .qz-service-card.qr-theme:hover .qz-border-frame-qr {
+                            opacity: 1;
+                            transform: rotate(0deg) scale(0.95);
+                            inset: 10px;
+                        }
+
+                        /* BACKGROUND GLOW */
+                        .qz-service-card.qr-theme::before {
+                            content: "";
+                            position: absolute;
+                            width: 140px;
+                            height: 140px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            filter: blur(60px);
+                            opacity: 0.15;
+                            z-index: 0;
+                            transition: all 0.5s ease;
+                        }
+
+                        .qz-service-card.qr-theme:hover::before {
+                            opacity: 0.4;
+                            transform: scale(1.5);
+                        }
+
+                        .qz-content-wrapper {
+                            position: relative;
+                            z-index: 2;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 12px;
+                            /* Prevents the text from catching the mouse cursor */
+                            pointer-events: none;
+                        }
+
+                        .qz-icon-box-qr {
+                            font-size: 40px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.3));
+                            transition: transform 0.5s ease;
+                        }
+
+                        .qz-service-card.qr-theme:hover .qz-icon-box-qr {
+                            transform: scale(1.1) translateY(-5px);
+                        }
+
+                        .qz-title-qr {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: var(--text-main);
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin: 0;
+                        }
+
+                        .qz-description-qr {
+                            font-size: 14px;
+                            color: var(--text-sub);
+                            margin: 0;
+                            transition: color 0.3s ease;
+                        }
+
+                        .qz-service-card.qr-theme:hover .qz-description-qr {
+                            color: var(--primary-color);
+                        }
+
+                        .qz-click-hint-qr {
+                            margin-top: 15px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: var(--primary-color);
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
+                            opacity: 0.6;
+                            transition: all 0.3s ease;
+                        }
+
+                        .qz-service-card.qr-theme:hover .qz-click-hint-qr {
+                            letter-spacing: 5px;
+                            opacity: 1;
+                        }
+
+                        .qz-service-card.qr-theme:hover {
+                            transform: translateY(-10px);
+                        }
+                    </style>
+
+                    <div onclick="window.toggleSubGrid('assets', this)" class="qz-service-card qr-theme">
+                        <div class="qz-border-frame-qr"></div>
+
+                        <div class="qz-content-wrapper">
+                            <div class="qz-icon-box-qr">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+
+                            <h3 class="qz-title-qr">QR Ecosystem</h3>
+
+                            <p class="qz-description-qr">Menus, Catalogs & Support</p>
+
+                            <div class="qz-click-hint-qr">View All <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">QR Ecosystem</h3>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mb-4">Menus, Catalogs & Support</p>
-                    <span class="text-green-600 dark:text-green-400 text-sm font-semibold group-hover:underline">View
-                        All <i class="fas fa-chevron-down ml-1 text-xs"></i></span>
+
+                    <div id="subgrid-assets"
+                        class="hidden w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
                 </div>
 
-                <div onclick="window.toggleSubGrid('identity', this)"
-                    class="service-card group glass-card rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
-                    <div
-                        class="w-16 h-16 bg-gradient-to-tr from-purple-500 to-fuchsia-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fas fa-fingerprint"></i>
+                <div class="qz-service-container w-full">
+                    <style>
+                        .qz-service-card.identity-theme {
+                            --primary-color: #a855f7;
+                            /* Purple-500 */
+                            --secondary-color: #d946ef;
+                            /* Fuchsia-500 */
+                            --card-bg: #ffffff;
+                            --text-main: #1e293b;
+                            --text-sub: #64748b;
+
+                            width: 100%;
+                            min-height: 240px;
+                            background: var(--card-bg);
+                            border-radius: 20px;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            cursor: pointer;
+                            overflow: hidden;
+                            transition: all 0.4s ease;
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            text-align: center;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+
+                            /* FIX FOR CURSOR BLINKING / TEXT SELECTION */
+                            user-select: none;
+                            -webkit-user-select: none;
+                            -webkit-tap-highlight-color: transparent;
+                        }
+
+                        /* DARK MODE AUTOMATIC OVERRIDE */
+                        .dark .qz-service-card.identity-theme {
+                            --card-bg: #0f172a;
+                            --text-main: #ffffff;
+                            --text-sub: #94a3b8;
+                            border: 1px solid rgba(255, 255, 255, 0.05);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        }
+
+                        /* UIVERSE ROTATING BORDER */
+                        .qz-border-frame-identity {
+                            position: absolute;
+                            inset: 0;
+                            border: 2px solid transparent;
+                            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                                linear-gradient(135deg, var(--primary-color), var(--secondary-color)) border-box;
+                            border-radius: 20px;
+                            opacity: 0.3;
+                            transform: rotate(-3deg) scale(1.02);
+                            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .qz-service-card.identity-theme:hover .qz-border-frame-identity {
+                            opacity: 1;
+                            transform: rotate(0deg) scale(0.95);
+                            inset: 10px;
+                        }
+
+                        /* BACKGROUND GLOW */
+                        .qz-service-card.identity-theme::before {
+                            content: "";
+                            position: absolute;
+                            width: 140px;
+                            height: 140px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            filter: blur(60px);
+                            opacity: 0.15;
+                            z-index: 0;
+                            transition: all 0.5s ease;
+                        }
+
+                        .qz-service-card.identity-theme:hover::before {
+                            opacity: 0.4;
+                            transform: scale(1.5);
+                        }
+
+                        .qz-content-wrapper {
+                            position: relative;
+                            z-index: 2;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 12px;
+                            pointer-events: none;
+                        }
+
+                        .qz-icon-box-identity {
+                            font-size: 40px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            filter: drop-shadow(0 2px 10px rgba(168, 85, 247, 0.3));
+                            transition: transform 0.5s ease;
+                        }
+
+                        .qz-service-card.identity-theme:hover .qz-icon-box-identity {
+                            transform: scale(1.1) translateY(-5px);
+                        }
+
+                        .qz-title-identity {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: var(--text-main);
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin: 0;
+                        }
+
+                        .qz-description-identity {
+                            font-size: 14px;
+                            color: var(--text-sub);
+                            margin: 0;
+                            transition: color 0.3s ease;
+                        }
+
+                        .qz-service-card.identity-theme:hover .qz-description-identity {
+                            color: var(--primary-color);
+                        }
+
+                        .qz-click-hint-identity {
+                            margin-top: 15px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: var(--primary-color);
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
+                            opacity: 0.6;
+                            transition: all 0.3s ease;
+                        }
+
+                        .qz-service-card.identity-theme:hover .qz-click-hint-identity {
+                            letter-spacing: 5px;
+                            opacity: 1;
+                        }
+
+                        .qz-service-card.identity-theme:hover {
+                            transform: translateY(-10px);
+                        }
+                    </style>
+
+                    <div onclick="window.toggleSubGrid('identity', this)" class="qz-service-card identity-theme">
+                        <div class="qz-border-frame-identity"></div>
+
+                        <div class="qz-content-wrapper">
+                            <div class="qz-icon-box-identity">
+                                <i class="fas fa-fingerprint"></i>
+                            </div>
+
+                            <h3 class="qz-title-identity">Brand Identity</h3>
+
+                            <p class="qz-description-identity">Logos, SEO & GMB Visibility</p>
+
+                            <div class="qz-click-hint-identity">View All <i
+                                    class="fas fa-chevron-down ml-1 text-xs"></i></div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Brand Identity</h3>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mb-4">Logos, SEO & GMB Visibility</p>
-                    <span class="text-purple-600 dark:text-purple-400 text-sm font-semibold group-hover:underline">View
-                        All <i class="fas fa-chevron-down ml-1 text-xs"></i></span>
+
+                    <div id="subgrid-identity"
+                        class="hidden w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
                 </div>
 
-                <div onclick="window.toggleSubGrid('support', this)"
-                    class="service-card group glass-card rounded-2xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
-                    <div
-                        class="w-16 h-16 bg-gradient-to-tr from-orange-500 to-red-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-4">
-                        <i class="fas fa-tools"></i>
+
+
+
+                <div class="qz-service-container w-full">
+                    <style>
+                        .qz-service-card.support-theme {
+                            --primary-color: #f97316;
+                            --secondary-color: #ef4444;
+                            --card-bg: #ffffff;
+                            --text-main: #1e293b;
+                            --text-sub: #64748b;
+
+                            width: 100%;
+                            min-height: 240px;
+                            background: var(--card-bg);
+                            border-radius: 20px;
+                            position: relative;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2rem;
+                            cursor: pointer;
+                            overflow: hidden;
+                            transition: all 0.4s ease;
+                            border: 1px solid rgba(0, 0, 0, 0.05);
+                            text-align: center;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+
+                            /* FIX FOR CURSOR BLINKING */
+                            user-select: none;
+                            -webkit-user-select: none;
+                            -webkit-tap-highlight-color: transparent;
+                        }
+
+                        /* DARK MODE AUTOMATIC OVERRIDE */
+                        .dark .qz-service-card.support-theme {
+                            --card-bg: #0f172a;
+                            --text-main: #ffffff;
+                            --text-sub: #94a3b8;
+                            border: 1px solid rgba(255, 255, 255, 0.05);
+                            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        }
+
+                        .qz-border-frame-support {
+                            position: absolute;
+                            inset: 0;
+                            border: 2px solid transparent;
+                            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                                linear-gradient(135deg, var(--primary-color), var(--secondary-color)) border-box;
+                            border-radius: 20px;
+                            opacity: 0.3;
+                            transform: rotate(-3deg) scale(1.02);
+                            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                            pointer-events: none;
+                            z-index: 1;
+                        }
+
+                        .qz-service-card.support-theme:hover .qz-border-frame-support {
+                            opacity: 1;
+                            transform: rotate(0deg) scale(0.95);
+                            inset: 10px;
+                        }
+
+                        .qz-service-card.support-theme::before {
+                            content: "";
+                            position: absolute;
+                            width: 140px;
+                            height: 140px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            filter: blur(60px);
+                            opacity: 0.15;
+                            z-index: 0;
+                            transition: all 0.5s ease;
+                        }
+
+                        .qz-service-card.support-theme:hover::before {
+                            opacity: 0.4;
+                            transform: scale(1.5);
+                        }
+
+                        .qz-content-wrapper {
+                            position: relative;
+                            z-index: 2;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 12px;
+                            /* Prevents the text from catching the mouse cursor */
+                            pointer-events: none;
+                        }
+
+                        .qz-icon-box-support {
+                            font-size: 40px;
+                            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+                            background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            filter: drop-shadow(0 2px 10px rgba(249, 115, 22, 0.3));
+                            transition: transform 0.5s ease;
+                        }
+
+                        .qz-service-card.support-theme:hover .qz-icon-box-support {
+                            transform: scale(1.1) translateY(-5px);
+                        }
+
+                        .qz-title-support {
+                            font-size: 22px;
+                            font-weight: 800;
+                            color: var(--text-main);
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin: 0;
+                        }
+
+                        .qz-description-support {
+                            font-size: 14px;
+                            color: var(--text-sub);
+                            margin: 0;
+                            transition: color 0.3s ease;
+                        }
+
+                        .qz-service-card.support-theme:hover .qz-description-support {
+                            color: var(--primary-color);
+                        }
+
+                        .qz-click-hint-support {
+                            margin-top: 15px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: var(--primary-color);
+                            text-transform: uppercase;
+                            letter-spacing: 3px;
+                            opacity: 0.6;
+                            transition: all 0.3s ease;
+                        }
+
+                        .qz-service-card.support-theme:hover .qz-click-hint-support {
+                            letter-spacing: 5px;
+                            opacity: 1;
+                        }
+
+                        .qz-service-card.support-theme:hover {
+                            transform: translateY(-10px);
+                        }
+                    </style>
+
+                    <div onclick="window.toggleSubGrid('support', this)" class="qz-service-card support-theme">
+                        <div class="qz-border-frame-support"></div>
+                        <div class="qz-content-wrapper">
+                            <div class="qz-icon-box-support"><i class="fas fa-tools"></i></div>
+                            <h3 class="qz-title-support">Tech Support</h3>
+                            <p class="qz-description-support">Maintenance, SSL & Hosting</p>
+                            <div class="qz-click-hint-support">View All <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-slate-900 dark:text-white">Tech Support</h3>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mb-4">Maintenance, SSL & Hosting</p>
-                    <span class="text-orange-600 dark:text-orange-400 text-sm font-semibold group-hover:underline">View
-                        All <i class="fas fa-chevron-down ml-1 text-xs"></i></span>
+
+                    <div id="subgrid-support"
+                        class="hidden w-full mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
                 </div>
+
+
+
             </div>
 
             <div id="subGridWrapper" class="w-full relative z-20">
@@ -1276,6 +2010,325 @@
                                 <h4 class="text-lg font-bold text-white">Affordable Pricing</h4>
                                 <p class="text-sm text-gray-200">Premium digital presence at local rates.</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2 flex justify-center mt-12 mb-20 relative z-50">
+                        <style>
+                            /* RESPONSIVE SCALING WRAPPER */
+                            .button-mobile-wrapper {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                /* On mobile, shrink the entire area */
+                                transform: scale(0.75);
+                            }
+
+                            @media (min-width: 640px) {
+                                .button-mobile-wrapper {
+                                    transform: scale(1);
+                                    /* Full size on tablets/desktop */
+                                }
+                            }
+
+                            .area {
+                                --ease: cubic-bezier(0.5, 0, 0.3, 1);
+                                --ease-elastic: cubic-bezier(0.5, 2, 0.3, 0.8);
+                                --radius: 26px;
+                                --primary: #45f8f8;
+                                position: relative;
+                                cursor: pointer;
+                                user-select: none;
+                                transition: all 0.6s var(--ease-elastic);
+                            }
+
+                            .area input {
+                                opacity: 0;
+                                width: 0;
+                                height: 0;
+                                position: absolute;
+                            }
+
+                            .btn-engine-main {
+                                outline: none;
+                                cursor: pointer;
+                                border: 0;
+                                border-radius: var(--radius);
+                                position: relative;
+                                width: 240px;
+                                height: 74px;
+                                pointer-events: none;
+                                transform-style: preserve-3d;
+                                perspective: 1000px;
+                                transform: rotateX(4deg);
+                                background: var(--primary);
+                                box-shadow: inset 0 0 30px rgb(34, 124, 136), 0 5px 10px -2px rgba(0, 10, 20, 0.5),
+                                    0 40px 30px -15px rgba(10, 20, 30, 0.3), inset 0 -2px 0 -1px #484e60, inset 0 0 2px 4px #888ea3;
+                                transition: all 0.6s var(--ease-elastic);
+                            }
+
+                            .btn-engine-main::after {
+                                content: "";
+                                border-radius: 50%;
+                                width: 100px;
+                                height: 100px;
+                                background: white;
+                                position: absolute;
+                                filter: blur(40px);
+                                mix-blend-mode: plus-lighter;
+                                inset: 0;
+                                margin: auto;
+                                top: 10px;
+                                transition: all 1s ease;
+                                transform: scale(0);
+                            }
+
+                            .area input:checked~.btn-engine-main::after {
+                                animation: pulse-out 3s var(--ease-elastic) infinite;
+                            }
+
+                            @keyframes pulse-out {
+                                40% {
+                                    transform: scale(1);
+                                }
+                            }
+
+                            .wrap-cover {
+                                border-radius: calc(var(--radius) * 0.85);
+                                inset: 0;
+                                background: linear-gradient(to bottom, #6e96b6 0%, #00ffd2 50%, #00ffb7 100%);
+                                position: absolute;
+                                transform-origin: top;
+                                transform: scale(0.99, 1) translate3d(0px, -7px, 10px);
+                                transition: all 0.7s ease;
+                                z-index: 20;
+                            }
+
+                            .area input:not(:checked)~.btn-engine-main .wrap-cover {
+                                animation: cover-open 0.9s ease forwards;
+                            }
+
+                            @keyframes cover-open {
+                                0% {
+                                    transform: translate3d(0, -7px, 10px);
+                                    box-shadow: none;
+                                }
+
+                                20% {
+                                    transform: translate3d(0, 0, 10px);
+                                }
+
+                                80% {
+                                    transform: translate3d(0, 0, 10px) rotateY(0) rotateX(74deg);
+                                }
+
+                                100% {
+                                    transform: translate3d(0, 0, 10px) rotateY(0) rotateX(70deg);
+                                    box-shadow: 0 5px 1px -1px #798593, 0 9px 0 -2px #4d6176, 0 60px 40px -30px black;
+                                }
+                            }
+
+                            .reflex-layer {
+                                position: absolute;
+                                inset: 0;
+                                overflow: hidden;
+                                border-radius: inherit;
+                                z-index: 9;
+                            }
+
+                            .reflex-layer:before {
+                                content: "";
+                                position: absolute;
+                                width: 300px;
+                                top: -40%;
+                                bottom: -40%;
+                                left: -132%;
+                                background: linear-gradient(to right, rgba(221, 249, 255, 0.2) 10%, rgba(221, 245, 255, 0.5) 60%, rgba(221, 255, 254, 0.2) 90%);
+                                transform: skew(-30deg);
+                                transition: all 0.7s var(--ease);
+                            }
+
+                            .area:hover .reflex-layer:before {
+                                transform: translate(192%, 0) skew(-30deg);
+                            }
+
+                            .content-box {
+                                pointer-events: none;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                position: relative;
+                                height: 100%;
+                                border-radius: inherit;
+                                overflow: hidden;
+                            }
+
+                            .content-box::before {
+                                content: "";
+                                inset: 0px;
+                                position: absolute;
+                                background: linear-gradient(to bottom, #dde0e1 30%, #aeb2b8 90%);
+                                filter: blur(2px);
+                                z-index: -1;
+                            }
+
+                            .engine-text-chars {
+                                position: absolute;
+                                inset: 0;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+
+                            .engine-text-chars span {
+                                display: block;
+                                color: transparent;
+                                position: relative;
+                                font-weight: 700;
+                                font-family: Arial;
+                                font-size: 21px;
+                            }
+
+                            .engine-text-chars span::before,
+                            .engine-text-chars span::after {
+                                content: attr(data-label);
+                                position: absolute;
+                                left: 0;
+                                color: #3c5d7d;
+                                text-shadow: 0 1px 1px rgba(255, 255, 255, 0.7);
+                            }
+
+                            .engine-text-chars span::before {
+                                opacity: 0;
+                                transform: translateY(-100%);
+                            }
+
+                            .engine-text-chars span:nth-child(5) {
+                                margin-right: 12px;
+                            }
+
+                            .area:hover .engine-text-chars span::before {
+                                animation: char-in 0.8s ease calc(var(--i) * 0.04s) forwards;
+                            }
+
+                            .area:hover .engine-text-chars span::after {
+                                animation: char-out 1.2s ease calc(var(--i) * 0.04s) forwards;
+                            }
+
+                            @keyframes char-in {
+                                0% {
+                                    opacity: 0;
+                                    transform: scale(10) translateX(-100%);
+                                    filter: blur(10px);
+                                    color: #00fbff;
+                                }
+
+                                100% {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                    filter: blur(0);
+                                }
+                            }
+
+                            @keyframes char-out {
+                                0% {
+                                    transform: translateY(0);
+                                    opacity: 1;
+                                }
+
+                                100% {
+                                    transform: translateY(-80%) scale(4);
+                                    filter: blur(4px);
+                                    opacity: 0;
+                                    color: #00ffd2;
+                                }
+                            }
+
+                            .gears-mask {
+                                opacity: 0;
+                                position: absolute;
+                                inset: 4px;
+                                border-radius: inherit;
+                                transition: all 1s ease;
+                                overflow: hidden;
+                            }
+
+                            .area input:not(:checked)~.btn-engine-main .gears-mask {
+                                opacity: 1;
+                            }
+
+                            .gears-mask svg {
+                                fill: #49b9c2;
+                                width: 85%;
+                                transform: translate(15%, 15%);
+                            }
+
+                            .g-large {
+                                animation: spin 5s infinite linear;
+                                transform-origin: center;
+                                transform-box: fill-box;
+                            }
+
+                            .g-med {
+                                animation: spin reverse 3.75s infinite linear;
+                                transform-origin: center;
+                                transform-box: fill-box;
+                            }
+
+                            .g-small {
+                                animation: spin 2.5s infinite linear;
+                                transform-origin: center;
+                                transform-box: fill-box;
+                            }
+
+                            @keyframes spin {
+                                to {
+                                    transform: rotate(359deg);
+                                }
+                            }
+
+                            .area:hover .btn-engine-main {
+                                transform: rotateX(0deg) translateY(5px);
+                            }
+                        </style>
+
+                        <div class="button-mobile-wrapper">
+                            <label class="area">
+                                <input type="checkbox" checked
+                                    onchange="if(!this.checked){ setTimeout(()=> window.location.href='about.html', 1500)}">
+                                <button class="btn-engine-main">
+                                    <div class="gears-mask">
+                                        <svg viewBox="0 0 635 523">
+                                            <g>
+                                                <path class="g-large"
+                                                    d="M635 184V163L606 159C605 149 603 140 600 131L625 117L617 98L589 105C584 97 579 89 573 81L592 58L577 43L554 60C547 54 539 49 530 44L537 16L518 8L504 33C495 30 486 28 476 27L472 0H451L447 29C437 30 428 32 419 35L405 9L386 17L393 45C385 50 377 55 369 61L346 44L331 58L348 81C342 88 337 96 332 105L304 98L296 117L321 131C318 140 316 149 315 159L286 163V184L315 188C316 198 318 207 321 216L296 230L304 249L332 242C337 250 342 258 348 266L331 289L346 304L369 287C376 293 384 298 393 303L386 331L405 339L419 314C428 317 437 319 447 320L451 349H472L476 320C486 319 495 317 504 314L518 339L537 331L530 303C538 298 546 293 554 287L577 304L592 289L575 266C581 259 586 251 591 242L619 249L627 230L602 216C605 207 607 198 608 188L635 184ZM461 284C400 284 351 235 351 174C351 113 401 64 461 64C521 64 571 113 571 174C571 235 522 284 461 284Z">
+                                                </path>
+                                                <path class="g-med"
+                                                    d="M392 390V369L364 365C363 355 360 346 357 337L380 320L369 302L342 313C336 305 329 299 322 293L333 267L315 256L298 279C289 275 280 273 270 272L266 244H245L241 272C231 273 222 276 213 279L196 256L178 267L189 293C181 299 175 306 169 313L143 302L132 320L155 337C151 346 149 355 148 365L120 369V390L148 394C149 404 152 413 155 422L132 439L143 457L169 446C175 454 182 460 189 466L178 492L196 503L213 480C222 484 231 486 241 487L245 515H266L270 487C280 486 289 483 298 480L315 503L333 492L322 466C330 460 336 453 342 446L368 457L379 439L356 422C360 413 362 404 363 394L392 390ZM255 453C214 453 181 420 181 379C181 338 214 305 255 305C296 305 329 338 329 379C328 420 295 453 255 453Z">
+                                                </path>
+                                                <path class="g-small"
+                                                    d="M200 236V215L171 211C169 201 165 193 160 185L178 162L163 147L140 165C132 160 123 156 114 154L110 125H90L86 154C76 156 68 160 60 165L37 147L22 162L40 185C35 193 31 202 29 211L0 215V236L29 240C31 250 35 258 40 266L22 289L37 304L60 286C68 291 77 295 86 297L90 326H111L115 297C125 295 133 291 141 286L164 304L179 289L161 266C166 258 170 249 172 240L200 236ZM100 262C80 262 63 245 63 225C63 205 80 188 100 188C120 188 137 205 137 225C137 245 121 262 100 262Z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+
+                                    <div class="wrap-cover">
+                                        <div class="reflex-layer"></div>
+                                        <div class="content-box">
+                                            <span class="engine-text-chars">
+                                                <span style="--i: 1" data-label="A">A</span>
+                                                <span style="--i: 2" data-label="B">B</span>
+                                                <span style="--i: 3" data-label="O">O</span>
+                                                <span style="--i: 4" data-label="U">U</span>
+                                                <span style="--i: 5" data-label="T">T</span>
+                                                <span style="--i: 6" data-label="U">U</span>
+                                                <span style="--i: 7" data-label="S">S</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </button>
+                            </label>
                         </div>
                     </div>
                 </div>
