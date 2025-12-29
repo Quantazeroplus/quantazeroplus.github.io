@@ -611,6 +611,34 @@
             transform: scale(0.9);
             background: rgba(59, 130, 246, 0.2);
         }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-10px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            60% {
+                transform: translateX(-10px);
+            }
+
+            80% {
+                transform: translateX(10px);
+            }
+        }
+
+        .animate-shake {
+            animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+        }
     </style>
 </head>
 
@@ -683,23 +711,28 @@
                                 <p id="dropUserEmail" class="text-xs font-bold dark:text-white truncate">
                                     email@example.com</p>
                             </div>
+
                             <div class="p-2 space-y-1">
-                                <button onclick="window.openEditProfile()"
+                                <button onclick="window.confirmAction('name')"
                                     class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 rounded-xl transition-all flex items-center gap-3">
                                     <i class="fas fa-user-edit w-4"></i> Edit Profile
                                 </button>
-                                <button onclick="window.openChangePassword()"
+
+                                <button onclick="window.confirmAction('password')"
                                     class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 rounded-xl transition-all flex items-center gap-3">
                                     <i class="fas fa-shield-alt w-4"></i> Security Settings
                                 </button>
-                                <button onclick="window.triggerProfileUpdate()"
+
+                                <button onclick="window.confirmAction('image')"
                                     class="w-full text-left px-4 py-2.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 rounded-xl transition-all flex items-center gap-3">
                                     <i class="fas fa-camera w-4"></i> Update Photo
                                 </button>
+
                                 <div class="h-px bg-slate-100 dark:bg-white/10 my-1"></div>
-                                <button onclick="window.logout()"
-                                    class="w-full text-left px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all flex items-center gap-3">
-                                    <i class="fas fa-sign-out-alt w-4"></i> Logout Account
+
+                                <button onclick="window.confirmAction('logout')"
+                                    class="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 rounded-xl flex items-center gap-3">
+                                    <i class="fas fa-sign-out-alt"></i> Logout Account
                                 </button>
                             </div>
                         </div>
@@ -757,41 +790,45 @@
                         </div>
 
                         <div class="grid grid-cols-4 gap-2 pt-2 border-t border-blue-500/10">
-                            <button onclick="window.openEditProfile(); toggleMenu();"
+                            <button onclick="window.confirmAction('name')"
                                 class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-orange-500/20 transition-all group">
                                 <i class="fas fa-pencil-alt text-orange-500 text-sm"></i>
                                 <span
                                     class="text-[8px] font-bold uppercase text-slate-500 dark:text-slate-400">Name</span>
                             </button>
 
-                            <button onclick="window.openChangePassword(); toggleMenu();"
+                            <button onclick="window.confirmAction('password')"
                                 class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-blue-500/20 transition-all group">
                                 <i class="fas fa-shield-alt text-blue-500 text-sm"></i>
                                 <span
                                     class="text-[8px] font-bold uppercase text-slate-500 dark:text-slate-400">Security</span>
                             </button>
 
-                            <button onclick="window.triggerProfileUpdate(); toggleMenu();"
+                            <button onclick="window.confirmAction('image')"
                                 class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-emerald-500/20 transition-all group">
                                 <i class="fas fa-camera text-emerald-500 text-sm"></i>
                                 <span
                                     class="text-[8px] font-bold uppercase text-slate-500 dark:text-slate-400">Photo</span>
                             </button>
 
-                            <button onclick="window.logout()"
+                            <button onclick="window.confirmAction('logout')"
                                 class="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-red-500/20 transition-all group">
                                 <i class="fas fa-sign-out-alt text-red-500 text-sm"></i>
                                 <span
                                     class="text-[8px] font-bold uppercase text-slate-500 dark:text-slate-400">Exit</span>
                             </button>
-
                         </div>
+
                         <div class="text-center mt-0.5 pt-0.5 border-t border-blue-500/5">
                             <p class="text-[9px] font-bold text-red-500/50 uppercase tracking-widest animate-pulse">
                                 <i class="fas fa-info-circle mr-1"></i> you can edit your account.
                             </p>
                         </div>
                     </div>
+
+
+
+
                 </div>
 
 
@@ -4071,6 +4108,64 @@
 
 
         window.logout = () => { localStorage.removeItem('quanta_session'); location.reload(); };
+
+
+        /* --- GLOBAL CONFIRMATION CONTROLLER --- */
+        /* --- MODERN CUSTOM CONFIRMATION WINDOW WITH SOUND & SHAKE --- */
+        window.confirmAction = function (type) {
+            // 1. Play Sound Effect (Soft Pop)
+            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play blocked by browser policy until user interacts."));
+
+            const messages = {
+                name: { title: "Edit Name?", msg: "Would you like to change your display name?", icon: "fa-pencil-alt", color: "text-orange-500", btn: "bg-orange-500" },
+                password: { title: "Security Update", msg: "Are you sure you want to change your password?", icon: "fa-shield-alt", color: "text-blue-500", btn: "bg-blue-600" },
+                image: { title: "Update Photo", msg: "Ready to upload a new profile picture?", icon: "fa-camera", color: "text-emerald-500", btn: "bg-emerald-600" },
+                logout: { title: "Logout?", msg: "Are you sure you want to end your session?", icon: "fa-sign-out-alt", color: "text-red-500", btn: "bg-red-600" }
+            };
+
+            const data = messages[type];
+            const isLogout = type === 'logout';
+
+            const modal = document.createElement('div');
+            modal.id = "confirmWindow";
+            modal.className = "fixed inset-0 z-[20000] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-fade-in";
+
+            modal.innerHTML = `
+        <div id="modalBox" class="bg-white dark:bg-[#0f172a] w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl border border-white/10 transform animate-scale-in ${isLogout ? 'animate-shake' : ''}">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 ${data.color} bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                    <i class="fas ${data.icon}"></i>
+                </div>
+                <h3 class="text-xl font-bold dark:text-white">${data.title}</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${data.msg}</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('confirmWindow').remove()" class="flex-1 py-3.5 rounded-2xl font-bold text-slate-500 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 transition-all">Cancel</button>
+                <button id="finalConfirmBtn" class="flex-1 py-3.5 rounded-2xl font-bold text-white ${data.btn} shadow-lg active:scale-95 transition-all">Confirm</button>
+            </div>
+        </div>
+    `;
+
+            document.body.appendChild(modal);
+
+            document.getElementById('finalConfirmBtn').onclick = () => {
+                modal.remove();
+                if (type === 'name') window.openEditProfile();
+                if (type === 'password') window.openChangePassword();
+                if (type === 'image') window.triggerProfileUpdate();
+                if (type === 'logout') window.logout();
+
+                document.getElementById('mobile-menu')?.classList.add('hidden');
+                document.getElementById('userDropdown')?.classList.add('hidden');
+            };
+        };
+        /* Helper function for the photo button */
+        window.triggerProfileUpdate = function () {
+            const input = document.getElementById('navProfileUpdateInput');
+            if (input) input.click();
+        };
     </script>
 
 
