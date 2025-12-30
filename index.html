@@ -639,12 +639,66 @@
         .animate-shake {
             animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
         }
+
+
+        /* --- OFFLINE BIRD PHYSICS GAME --- */
+        #offline-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background: #020617;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+        }
+
+        #game-canvas {
+            background: linear-gradient(to bottom, #001a33 0%, #000c1d 100%);
+            border: 4px solid #334155;
+            border-radius: 30px;
+            box-shadow: 0 0 80px rgba(0, 123, 255, 0.2);
+            max-width: 98vw;
+            max-height: 70vh;
+        }
+
+        .game-hud {
+            position: absolute;
+            top: 20px;
+            display: flex;
+            gap: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #45f8f8;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 
 <body
     class="bg-slate-50 dark:bg-[#020617] text-slate-800 dark:text-gray-200 antialiased overflow-x-hidden transition-colors duration-500 min-h-screen">
+    <div id="offline-overlay">
+        <div class="game-hud">
+            <div>SCORE: <span id="game-score">0</span></div>
+            <div>LVL: <span id="game-level">1</span></div>
+        </div>
 
+        <canvas id="game-canvas"></canvas>
+
+        <div class="mt-8 flex flex-col items-center">
+            <button onclick="window.manualReconnect()" class="tech-btn"
+                style="--primary: #3b82f6; width: 240px; font-size: 12px;">
+                <i class="fas fa-satellite-dish mr-2"></i> RE-ESTABLISH UPLINK
+            </button>
+            <p
+                style="color: #64748b; font-size: 9px; margin-top: 12px; letter-spacing: 3px; text-transform: uppercase;">
+                Pull the Bird back and release to patch bugs
+            </p>
+        </div>
+    </div>
     <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] md:w-[85%] max-w-7xl z-[100] transition-all duration-500"
         id="navbar">
         <div
@@ -4166,6 +4220,182 @@
             const input = document.getElementById('navProfileUpdateInput');
             if (input) input.click();
         };
+
+        /** * REAL-TYPE BIRD PHYSICS ENGINE - QUANTAZEROPLUS
+ * Features: Procedural Bird Drawing, Elastic Bands, Gravity
+ */
+        const g_overlay = document.getElementById('offline-overlay');
+        const g_canvas = document.getElementById('game-canvas');
+        const g_ctx = g_canvas.getContext('2d');
+
+        function resizeCanvas() {
+            g_canvas.width = Math.min(window.innerWidth - 20, 800);
+            g_canvas.height = Math.min(window.innerHeight * 0.6, 400);
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let score = 0, level = 1, gameActive = false, isPulling = false;
+        const sling = { x: 120, y: 0 };
+        const gravity = 0.22;
+
+        let bird = { x: 0, y: 0, r: 16, vx: 0, vy: 0, launched: false };
+        let targets = [];
+        let particles = [];
+
+        function resetBird() {
+            sling.y = g_canvas.height - 100;
+            bird = { x: sling.x, y: sling.y, r: 16, vx: 0, vy: 0, launched: false };
+        }
+
+        function initTargets() {
+            targets = [];
+            for (let i = 0; i < 2 + level; i++) {
+                targets.push({
+                    x: g_canvas.width - 100 - (Math.random() * 250),
+                    y: 50 + (Math.random() * (g_canvas.height - 150)),
+                    r: 20,
+                    hit: false
+                });
+            }
+        }
+
+        // Draw a Procedural Bird (Angry Bird Style)
+        function drawBird(x, y, radius, angle = 0) {
+            g_ctx.save();
+            g_ctx.translate(x, y);
+            g_ctx.rotate(angle);
+
+            // Body (Red/Blue Round)
+            g_ctx.fillStyle = "#ef4444";
+            g_ctx.beginPath();
+            g_ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            g_ctx.fill();
+
+            // Belly (Cream)
+            g_ctx.fillStyle = "#fee2e2";
+            g_ctx.beginPath();
+            g_ctx.arc(0, 5, radius * 0.7, 0.2 * Math.PI, 0.8 * Math.PI);
+            g_ctx.fill();
+
+            // Eyes
+            g_ctx.fillStyle = "white";
+            g_ctx.beginPath();
+            g_ctx.arc(6, -4, 5, 0, Math.PI * 2);
+            g_ctx.arc(-2, -4, 5, 0, Math.PI * 2);
+            g_ctx.fill();
+
+            g_ctx.fillStyle = "black";
+            g_ctx.beginPath();
+            g_ctx.arc(8, -4, 2, 0, Math.PI * 2);
+            g_ctx.arc(0, -4, 2, 0, Math.PI * 2);
+            g_ctx.fill();
+
+            // Beak
+            g_ctx.fillStyle = "#f59e0b";
+            g_ctx.beginPath();
+            g_ctx.moveTo(10, 0);
+            g_ctx.lineTo(22, 4);
+            g_ctx.lineTo(10, 8);
+            g_ctx.fill();
+
+            g_ctx.restore();
+        }
+
+        // Draw Target (Bug/Pig)
+        function drawBug(x, y, r) {
+            g_ctx.fillStyle = "#22c55e"; // Green Pig/Bug
+            g_ctx.beginPath();
+            g_ctx.arc(x, y, r, 0, Math.PI * 2);
+            g_ctx.fill();
+            // Eyes
+            g_ctx.fillStyle = "white";
+            g_ctx.beginPath(); g_ctx.arc(x - 6, y - 4, 4, 0, Math.PI * 2); g_ctx.arc(x + 6, y - 4, 4, 0, Math.PI * 2); g_ctx.fill();
+            g_ctx.fillStyle = "black";
+            g_ctx.beginPath(); g_ctx.arc(x - 6, y - 4, 2, 0, Math.PI * 2); g_ctx.arc(x + 6, y - 4, 2, 0, Math.PI * 2); g_ctx.fill();
+        }
+
+        function update() {
+            if (!gameActive) return;
+            g_ctx.clearRect(0, 0, g_canvas.width, g_canvas.height);
+
+            // 1. Draw Slingshot Rear Band
+            if (isPulling) {
+                g_ctx.strokeStyle = "#451a03"; g_ctx.lineWidth = 6;
+                g_ctx.beginPath(); g_ctx.moveTo(sling.x, sling.y); g_ctx.lineTo(bird.x, bird.y); g_ctx.stroke();
+            }
+
+            // 2. Draw Targets
+            targets.forEach(t => { if (!t.hit) drawBug(t.x, t.y, t.r); });
+
+            // 3. Draw Bird
+            let angle = bird.launched ? Math.atan2(bird.vy, bird.vx) : 0;
+            drawBird(bird.x, bird.y, bird.r, angle);
+
+            // 4. Draw Slingshot Front Band
+            if (isPulling) {
+                g_ctx.strokeStyle = "#78350f"; g_ctx.lineWidth = 4;
+                g_ctx.beginPath(); g_ctx.moveTo(sling.x - 10, sling.y); g_ctx.lineTo(bird.x, bird.y); g_ctx.stroke();
+            }
+
+            if (bird.launched) {
+                bird.vy += gravity; bird.x += bird.vx; bird.y += bird.vy;
+                targets.forEach(t => {
+                    if (!t.hit && Math.hypot(bird.x - t.x, bird.y - t.y) < bird.r + t.r) {
+                        t.hit = true; score += 100;
+                        document.getElementById('game-score').innerText = score;
+                    }
+                });
+                if (bird.y > g_canvas.height || bird.x > g_canvas.width || bird.x < 0) {
+                    if (targets.every(t => t.hit)) { level++; document.getElementById('game-level').innerText = level; initTargets(); }
+                    resetBird();
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        // Interaction
+        function getPointer(e) {
+            const rect = g_canvas.getBoundingClientRect();
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: cx - rect.left, y: cy - rect.top };
+        }
+
+        const startHandler = (e) => {
+            const p = getPointer(e);
+            if (!bird.launched && Math.hypot(p.x - bird.x, p.y - bird.y) < 40) isPulling = true;
+        };
+        const moveHandler = (e) => {
+            if (!isPulling) return;
+            const p = getPointer(e);
+            const dist = Math.min(Math.hypot(p.x - sling.x, p.y - sling.y), 90);
+            const angle = Math.atan2(p.y - sling.y, p.x - sling.x);
+            bird.x = sling.x + Math.cos(angle) * dist;
+            bird.y = sling.y + Math.sin(angle) * dist;
+        };
+        const endHandler = () => {
+            if (!isPulling) return;
+            isPulling = false; bird.launched = true;
+            bird.vx = (sling.x - bird.x) * 0.14;
+            bird.vy = (sling.y - bird.y) * 0.14;
+        };
+
+        g_canvas.addEventListener('mousedown', startHandler);
+        window.addEventListener('mousemove', moveHandler);
+        window.addEventListener('mouseup', endHandler);
+        g_canvas.addEventListener('touchstart', startHandler);
+        window.addEventListener('touchmove', moveHandler, { passive: false });
+        window.addEventListener('touchend', endHandler);
+
+        window.manualReconnect = function () {
+            if (navigator.onLine) location.reload();
+            else window.showToast("Still Offline! Core compromised.", "error");
+        };
+
+        window.addEventListener('offline', () => { g_overlay.style.display = 'flex'; gameActive = true; resetBird(); initTargets(); update(); });
+        window.addEventListener('online', () => { g_overlay.style.display = 'none'; gameActive = false; });
+        if (!navigator.onLine) { g_overlay.style.display = 'flex'; gameActive = true; resetBird(); initTargets(); update(); }
     </script>
 
 
