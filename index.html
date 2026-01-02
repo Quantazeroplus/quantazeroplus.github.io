@@ -719,8 +719,8 @@
             </a>
 
             <div class="hidden md:flex space-x-10 items-center font-medium text-sm">
-                <a href="#home"
-                    class="text-slate-600 dark:text-gray-300 hover:text-vermaBlue dark:hover:text-white transition relative py-1 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-vermaBlue dark:after:bg-blue-500 after:bottom-0 after:left-0 after:transition-all hover:after:w-full">Mission</a>
+                <a href="#vlogs"
+                    class="text-slate-600 dark:text-gray-300 hover:text-vermaBlue dark:hover:text-white transition relative py-1 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-vermaBlue dark:after:bg-blue-500 after:bottom-0 after:left-0 after:transition-all hover:after:w-full">Vlogs</a>
                 <a href="#solution"
                     class="text-slate-600 dark:text-gray-300 hover:text-vermaBlue dark:hover:text-white transition relative py-1 after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-vermaBlue dark:after:bg-blue-500 after:bottom-0 after:left-0 after:transition-all hover:after:w-full">Solution</a>
                 <a href="#services"
@@ -886,9 +886,9 @@
                 </div>
 
 
-                <a href="#home"
+                <a href="#vlogs"
                     class="p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-gray-200 font-medium"
-                    onclick="toggleMenu()">Mission</a>
+                    onclick="toggleMenu()">Vlogs</a>
                 <a href="#solution"
                     class="p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-gray-200 font-medium"
                     onclick="toggleMenu()">Solution</a>
@@ -2928,6 +2928,174 @@
         </div>
     </section>
 
+
+    <section id="vlogs" class="py-24 bg-white dark:bg-[#020617] transition-colors duration-500 overflow-hidden">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span
+                    class="text-vermaBlue dark:text-blue-400 font-bold tracking-widest text-xs uppercase bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-800">Visual
+                    Stories</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mt-4 font-serif">Explore Our
+                    Vlogs</h2>
+                <div class="w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button onclick="window.filterVlogs('all')" class="vlog-filter-btn active">All</button>
+                <button onclick="window.filterVlogs('Latest')" class="vlog-filter-btn">Latest</button>
+                <button onclick="window.filterVlogs('Tutorial')" class="vlog-filter-btn">Tutorials</button>
+            </div>
+
+            <div id="vlogGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+                <div class="animate-pulse bg-slate-200 dark:bg-slate-800 h-80 rounded-[2.5rem]"></div>
+                <div class="animate-pulse bg-slate-200 dark:bg-slate-800 h-80 rounded-[2.5rem]"></div>
+                <div class="animate-pulse bg-slate-200 dark:bg-slate-800 h-80 rounded-[2.5rem]"></div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Standard CSS for Filter Buttons */
+        .vlog-filter-btn {
+            padding: 0.5rem 1.5rem;
+            /* px-6 py-2 */
+            border-radius: 9999px;
+            /* rounded-full */
+            font-size: 0.875rem;
+            /* text-sm */
+            font-weight: 700;
+            /* font-bold */
+            border-width: 1px;
+            /* border */
+            border-color: #e2e8f0;
+            /* border-slate-200 */
+            color: #64748b;
+            /* text-slate-500 */
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+            /* transition-all */
+            background: transparent;
+        }
+
+        /* Dark mode support using the 'dark' class on <html> */
+        .dark .vlog-filter-btn {
+            border-color: rgba(255, 255, 255, 0.1);
+            /* dark:border-white/10 */
+            color: #94a3b8;
+            /* dark:text-gray-400 */
+        }
+
+        /* Active State */
+        .vlog-filter-btn.active {
+            background-color: #2563eb;
+            /* bg-blue-600 */
+            border-color: #2563eb;
+            /* border-blue-600 */
+            color: #ffffff;
+            /* text-white */
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+            /* shadow-blue-500/30 */
+        }
+
+        .vlog-card {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .vlog-card:hover {
+            transform: translateY(-15px);
+        }
+
+        @keyframes heart-pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.4);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tw-translate-x), var(--tw-translate-y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .animate-heart-pop {
+            animation: heart-pop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49);
+        }
+
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            color: #ec4899;
+            /* pink-500 */
+            font-size: 10px;
+            animation: particle-float 0.8s ease-out forwards;
+        }
+    </style>
+
+    <div id="vlogCommentModal"
+        class="fixed inset-0 z-[60000] hidden flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-xl animate-fade-in">
+        <div
+            class="bg-white dark:bg-[#0f172a] w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-[3rem] shadow-2xl border border-white/10 flex flex-col">
+
+            <div
+                class="p-6 md:p-8 border-b dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5">
+                <div>
+                    <h3 id="modalVlogTitle"
+                        class="text-xl font-bold dark:text-white leading-tight truncate w-48 md:w-80">Vlog Title</h3>
+                    <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mt-1">Community Discussion
+                    </p>
+                </div>
+                <button onclick="window.closeVlogModal()"
+                    class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-slate-500 shadow-md hover:text-red-500 transition-all">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
+                <div id="modalVlogDescription"
+                    class="mb-8 text-slate-600 dark:text-slate-300 text-sm leading-relaxed border-b dark:border-white/5 pb-6">
+                </div>
+
+                <div id="commentInputArea" class="mb-8">
+                    <textarea id="vlogCommentText" placeholder="Share your thoughts on this vlog..."
+                        class="w-full p-5 rounded-2xl bg-slate-100 dark:bg-white/5 border dark:border-white/10 dark:text-white outline-none focus:ring-2 focus:ring-blue-500 h-28 text-sm transition-all"></textarea>
+                    <div class="flex justify-end mt-3">
+                        <button onclick="window.submitVlogComment()"
+                            class="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold text-xs shadow-lg active:scale-95 transition-all">
+                            Post Comment <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="commentLoginPrompt"
+                    class="hidden text-center py-6 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-3xl mb-8">
+                    <p class="text-sm text-slate-500">You must be logged in to post feedback.</p>
+                    <button onclick="window.toggleAuthModal(); window.closeVlogModal();"
+                        class="text-blue-500 font-bold text-xs uppercase mt-2 hover:underline">Login Now</button>
+                </div>
+
+                <div id="vlogCommentsList" class="space-y-6"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <section id="gallery"
         class="py-16 bg-slate-50 dark:bg-[#020617] border-t border-slate-200 dark:border-gray-900 transition-colors duration-500">
         <div class="container mx-auto px-4">
@@ -3347,7 +3515,7 @@
                 <div>
                     <h4 class="text-white font-bold mb-6">Quick Links</h4>
                     <ul class="space-y-3 text-sm">
-                        <li><a href="#home" class="hover:text-blue-400 transition">Mission</a></li>
+                        <li><a href="#vlogs" class="hover:text-blue-400 transition">Vlogs</a></li>
                         <li><a href="#services" class="hover:text-blue-400 transition">Work</a></li>
                         <li><a href="#contact" class="hover:text-blue-400 transition">Start Project</a></li>
                     </ul>
@@ -3468,7 +3636,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1h4r6GYRnSnjSuwmL_DW6lC9ZokbaPTl18WgT-b1P2XA_eNB5JPjrKI_C90e1B6a5Yg/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4rGSe3pA5CxN-j8nn8HhXi4QWR7Wpi8k2UFkQKpD_Y0QGE80c3h4CglwY_b5McMl2Sg/exec';
 
         // --- NEW: COOL TOAST NOTIFICATIONS ---
         window.showToast = function (message, type = 'success') {
@@ -3500,7 +3668,7 @@
         let autoSlideInterval;
 
         const staticImages = [
-            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000',
+            'https://unsplash.com/photos/silver-imac-on-brown-wooden-desk-webyw4NsFPg',
             'https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=1000',
             'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000',
             'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1000'
@@ -4396,6 +4564,321 @@
         window.addEventListener('offline', () => { g_overlay.style.display = 'flex'; gameActive = true; resetBird(); initTargets(); update(); });
         window.addEventListener('online', () => { g_overlay.style.display = 'none'; gameActive = false; });
         if (!navigator.onLine) { g_overlay.style.display = 'flex'; gameActive = true; resetBird(); initTargets(); update(); }
+
+
+
+
+
+        /* --- COMPLETE VLOG SYSTEM ENGINE --- */
+        let allVlogs = [];
+        let activeVlogId = null;
+        let activeVlogTitle = "";
+
+        window.initVlogs = async function () {
+            try {
+                const res = await fetch(`${SCRIPT_URL}?type=getVlogs`);
+                const result = await res.json();
+
+                if (result.status === "success") {
+                    allVlogs = result.data;
+                    window.renderVlogGrid(allVlogs);
+                } else {
+                    document.getElementById('vlogGrid').innerHTML = `<p class="col-span-full text-center text-red-500">Error: ${result.message}</p>`;
+                }
+            } catch (e) {
+                document.getElementById('vlogGrid').innerHTML = `<p class="col-span-full text-center text-red-500">Failed to connect to backend.</p>`;
+            }
+        };
+
+
+
+        window.renderVlogGrid = function (vlogs) {
+            const grid = document.getElementById('vlogGrid');
+            if (!grid) return;
+
+            if (!vlogs || vlogs.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center py-20 opacity-50">No vlogs found.</p>`;
+                return;
+            }
+
+            grid.innerHTML = vlogs.map((v, i) => {
+                const displayDate = v.date ? new Date(v.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently';
+                const displayAuthor = v.creator || 'Quantazero Team';
+
+                // SAFE TEXT HANDLING: Prevents quotes or new lines from breaking JS
+                const safeDesc = (v.description || "").replace(/"/g, '&quot;').replace(/'/g, "\\'");
+
+                return `
+        <div class="vlog-card glass-card rounded-[2.5rem] overflow-hidden border border-slate-100 dark:border-white/5 bg-white/50 dark:bg-white/5 cursor-pointer group"
+             onclick="window.openVlogDetails(${i})">
+            <div class="relative h-56 overflow-hidden">
+                <img src="${v.imageurl || ''}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute top-4 left-4 bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase shadow-lg z-10">
+                    ${v.category || 'Vlog'}
+                </div>
+            </div>
+            <div class="p-8">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">${displayDate}</span>
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">By ${displayAuthor}</span>
+                </div>
+
+                <h3 class="text-xl font-bold dark:text-white mb-2 leading-tight">${v.title || 'Untitled'}</h3>
+                
+                <div class="relative">
+                    <p id="desc-${i}" class="text-sm text-slate-600 dark:text-gray-400 line-clamp-2 transition-all duration-500">
+                        ${v.description || ''}
+                    </p>
+                    <button onclick="event.stopPropagation(); window.toggleReadMore(${i}, this)" 
+                            class="text-blue-500 text-[10px] font-bold uppercase mt-2 hover:underline tracking-widest">
+                        Read More
+                    </button>
+                </div>
+                
+                <div class="flex items-center justify-between border-t dark:border-white/5 pt-6 mt-4">
+                    <div class="flex gap-4">
+                        <button onclick="event.stopPropagation(); window.interactVlog(${v.rowid}, 'like', this)" class="flex items-center gap-1.5 text-slate-500">
+                            <i class="${localStorage.getItem('vlog_liked_' + v.rowid) ? 'fas' : 'far'} fa-heart text-sm"></i> 
+                            <span class="text-xs font-bold">${v.likes || 0}</span>
+                        </button>
+                        <div class="flex items-center gap-1.5 text-slate-400">
+                            <i class="fas fa-eye text-sm"></i> <span class="text-xs font-bold">${v.views || 0}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            }).join('');
+        };
+
+        // Toggle function
+        window.toggleReadMore = function (index, btn) {
+            const desc = document.getElementById(`desc-${index}`);
+            if (desc.classList.contains('line-clamp-2')) {
+                desc.classList.remove('line-clamp-2');
+                btn.innerText = "Show Less";
+            } else {
+                desc.classList.add('line-clamp-2');
+                btn.innerText = "Read More";
+            }
+        };
+
+        window.openVlogDetails = async function (index) {
+            const v = allVlogs[index];
+            if (!v) return;
+
+            activeVlogId = v.rowid;
+            const modal = document.getElementById('vlogCommentModal');
+            const descContainer = document.getElementById('modalVlogDescription');
+            const list = document.getElementById('vlogCommentsList');
+
+            if (!modal || !list) return;
+
+            document.getElementById('modalVlogTitle').innerText = v.title || "Untitled";
+
+            // 1. Inject Description
+            if (descContainer) {
+                descContainer.innerHTML = `
+            <p class="italic text-slate-400 mb-2 font-bold text-[10px] uppercase tracking-widest">Vlog Story</p>
+            <p class="text-slate-700 dark:text-slate-300 leading-relaxed">${v.description || "No description provided."}</p>
+        `;
+            }
+
+            // 2. Detect Feedback Column (Handles different possible names from Sheets)
+            const rawFeedback = v.feedback || v.comments || v.feedbackstr || "";
+            const feedbackStr = String(rawFeedback).trim();
+            const commentArray = (feedbackStr && feedbackStr !== "undefined" && feedbackStr !== "")
+                ? feedbackStr.split('\n---\n')
+                : [];
+
+            // 3. Create the Header for Feedback Section
+            const feedbackHeaderHTML = `
+        <div class="flex items-center justify-between mb-6 pt-6 border-t dark:border-white/5">
+            <h4 class="text-sm font-bold dark:text-white flex items-center gap-2">
+                <i class="fas fa-comments text-blue-500"></i> Community Feedback
+            </h4>
+            <span class="px-2 py-1 bg-blue-500/10 text-blue-500 rounded-md text-[10px] font-bold">
+                ${commentArray.length} COMMENTS
+            </span>
+        </div>
+    `;
+
+            // 4. Render the List inside the correctly identified 'vlogCommentsList'
+            if (commentArray.length > 0) {
+                list.innerHTML = feedbackHeaderHTML + commentArray.reverse().map(f => {
+                    const parts = f.split('): ');
+                    const header = parts[0] ? parts[0] + ')' : 'User';
+                    const msg = parts[1] || "";
+                    return `
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border dark:border-white/10 mb-4 animate-fade-in text-left">
+                <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase mb-1">${header}</p>
+                <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${msg}</p>
+            </div>`;
+                }).join('');
+            } else {
+                list.innerHTML = feedbackHeaderHTML + `
+            <div class="text-center py-10 opacity-30">
+                <i class="fas fa-comment-slash text-3xl mb-3 text-slate-400"></i>
+                <p class="text-sm">No comments yet. Be the first to share your thoughts!</p>
+            </div>`;
+            }
+
+            // 5. Auth Visibility
+            const session = JSON.parse(localStorage.getItem('quanta_session'));
+            document.getElementById('commentInputArea').classList.toggle('hidden', !session);
+            document.getElementById('commentLoginPrompt').classList.toggle('hidden', !!session);
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Track View in Background
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify({ action: "vlogAction", subAction: "view", rowId: v.rowid })
+            });
+        };
+
+        window.interactVlog = async function (rowId, subAction, el) {
+            const session = JSON.parse(localStorage.getItem('quanta_session'));
+            if (!session) return showToast("Please login to interact!", "error");
+
+            const likeKey = `vlog_liked_${rowId}`;
+            if (subAction === 'like' && localStorage.getItem(likeKey)) return showToast("Already liked!", "info");
+
+            // Start UI Animation (Optimistic)
+            const icon = el.querySelector('i');
+            icon.classList.add('animate-heart-pop');
+
+            // Create Burst Effect
+            for (let i = 0; i < 6; i++) {
+                createHeartParticle(el);
+            }
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ action: "vlogAction", subAction, rowId, userEmail: session.email })
+                });
+                const result = await res.json();
+
+                if (result.success && subAction === 'like') {
+                    localStorage.setItem(likeKey, 'true');
+                    const span = el.querySelector('span');
+                    if (span) span.innerText = result.newCount;
+
+                    icon.classList.replace('far', 'fas');
+                    icon.classList.add('text-pink-500');
+                    showToast("Liked!", "success");
+                }
+            } catch (e) {
+                icon.classList.remove('animate-heart-pop');
+                showToast("Action failed", "error");
+            }
+
+            // Cleanup animation class after it finishes
+            setTimeout(() => icon.classList.remove('animate-heart-pop'), 400);
+        };
+
+        // Helper function to create floating heart particles
+        function createHeartParticle(parent) {
+            const p = document.createElement('i');
+            p.className = 'fas fa-heart heart-particle';
+
+            // Random direction for each particle
+            const x = (Math.random() - 0.5) * 100;
+            const y = (Math.random() - 0.8) * 100;
+
+            p.style.setProperty('--tw-translate-x', `${x}px`);
+            p.style.setProperty('--tw-translate-y', `${y}px`);
+
+            parent.style.position = 'relative';
+            parent.appendChild(p);
+
+            // Remove from DOM after animation
+            setTimeout(() => p.remove(), 800);
+        }
+
+        window.submitVlogComment = async function () {
+            const textInput = document.getElementById('vlogCommentText');
+            const text = textInput.value.trim();
+            const session = JSON.parse(localStorage.getItem('quanta_session'));
+            const btn = document.querySelector('#vlogCommentModal button[onclick*="submitVlogComment"]');
+
+            if (!text) return showToast("Please write a comment!", "error");
+            if (!session) return showToast("Please login to comment!", "error");
+
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin mr-2"></i> POSTING...';
+
+            try {
+                const res = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "vlogAction",
+                        subAction: "feedback",
+                        rowId: activeVlogId,
+                        userName: session.username,
+                        message: text
+                    })
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    showToast("Comment posted!", "success");
+                    textInput.value = "";
+
+                    // Slide-in animation for UI
+                    const list = document.getElementById('vlogCommentsList');
+                    const time = new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    const newCommentHTML = `
+                <div class="p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/30 transition-all duration-700 translate-x-full opacity-0" id="tempComment">
+                    <p class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase mb-1">${session.username} • ${time}</p>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">${text}</p>
+                </div>`;
+
+                    if (list.innerHTML.includes("No comments yet")) list.innerHTML = "";
+                    list.insertAdjacentHTML('afterbegin', newCommentHTML);
+                    setTimeout(() => {
+                        const el = document.getElementById('tempComment');
+                        if (el) el.classList.remove('translate-x-full', 'opacity-0');
+                    }, 100);
+
+                } else {
+                    showToast("Error saving comment", "error");
+                }
+            } catch (e) {
+                showToast("Network Error", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        };
+
+        window.closeVlogModal = () => {
+            document.getElementById('vlogCommentModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        // Start logic
+        setTimeout(window.initVlogs, 1000);
+
+
+        window.filterVlogs = function (category) {
+            // 1. Update UI Buttons
+            document.querySelectorAll('.vlog-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText.toLowerCase() === category.toLowerCase());
+            });
+
+            // 2. Filter Data
+            if (category === 'all') {
+                window.renderVlogGrid(allVlogs);
+            } else {
+                const filtered = allVlogs.filter(v => (v.category || '').toLowerCase() === category.toLowerCase());
+                window.renderVlogGrid(filtered);
+            }
+        };
     </script>
 
 
